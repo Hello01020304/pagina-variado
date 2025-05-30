@@ -88,7 +88,6 @@
 
         /* Estilo para el banner de encabezado */
         .header-banner {
-            /* Se ha quitado la imagen de fondo, solo se mantiene el gradiente */
             background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7));
             padding: 4rem 0;
             border-radius: 1rem;
@@ -124,71 +123,14 @@
             margin-bottom: 1rem;
         }
 
-        .video-container iframe {
+        .video-container iframe,
+        .video-container video { /* Aplicar también a videos HTML5 */
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             border: 0;
-        }
-
-        /* Estilos para el modal/ventana flotante */
-        .modal {
-            display: none; /* Oculto por defecto */
-            position: fixed; /* Permanece en su lugar */
-            z-index: 100; /* Se superpone a todo */
-            left: 0;
-            top: 0;
-            width: 100%; /* Ancho completo */
-            height: 100%; /* Altura completa */
-            overflow: auto; /* Habilitar scroll si es necesario */
-            background-color: rgba(0,0,0,0.8); /* Fondo oscuro semitransparente */
-            display: flex; /* Para centrar el contenido */
-            justify-content: center;
-            align-items: center;
-            opacity: 0;
-            transition: opacity 0.3s ease-in-out;
-        }
-
-        .modal.show {
-            display: flex;
-            opacity: 1;
-        }
-
-        .modal-content {
-            background-color: #1a1a1a;
-            margin: auto;
-            padding: 20px;
-            border: 1px solid #333333;
-            width: 90%;
-            max-width: 800px; /* Ancho máximo para el video */
-            border-radius: 1rem;
-            position: relative;
-        }
-
-        .modal-content video {
-            width: 100%;
-            height: auto;
-            border-radius: 0.5rem;
-        }
-
-        .close-button {
-            color: #aaa;
-            position: absolute;
-            top: 10px;
-            right: 20px;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: color 0.3s ease;
-        }
-
-        .close-button:hover,
-        .close-button:focus {
-            color: #f00; /* Rojo UFC al pasar el ratón */
-            text-decoration: none;
-            cursor: pointer;
         }
     </style>
 </head>
@@ -230,7 +172,7 @@
                             onerror="this.onerror=null; this.src='https://placehold.co/300x150/0000FF/FFFFFF?text=Disney%2B+Logo';">
                     <h2 class="text-3xl font-bold ufc-red-text mb-3">Eventos UFC en Vivo: ¡No en Disney+ México!</h2>
                     <p class="text-lg text-gray-300 mb-4">
-                        Directo al grano: los eventos en vivo de UFC, incluyendo Pago Por Evento (PPV) y carteleras principales, <strong>no están disponibles en Disney+ en México</strong>. Esto se debe a acuerdos de licencia regionales específicos que otorgan los derechos de transmisión a otras plataformas en el país.
+                        Directo al grano: los eventos en vivo de UFC, incluyendo Pago Por Evento (PPV) y carteleras principales, **no están disponibles en Disney+ en México**. Esto se debe a acuerdos de licencia regionales específicos que otorgan los derechos de transmisión a otras plataformas en el país.
                     </p>
                     <p class="text-md text-gray-400">
                         ¡Pero no te preocupes! Hay otras formas de ver la acción. Esta guía te mostrará qué contenido de UFC SÍ puedes encontrar en Disney+ y cuáles son tus mejores opciones para ver las peleas en vivo en México. ¡Prepárate para la octágono!
@@ -357,8 +299,8 @@
                                 class="card-image"
                                 onerror="this.onerror=null; this.src='https://placehold.co/400x250/555555/FFFFFF?text=UFC+299';">
                         <h3 class="text-xl font-semibold ufc-gold-text mb-2">UFC 299: O'Malley vs. Vera 2</h3>
-                        <p class="text-gray-300 mb-2"><strong>Fecha:</strong> 9 de marzo de 2024</p>
-                        <p class="text-gray-300 mb-4"><strong>Lugar:</strong> Kaseya Center, Miami, Florida</p>
+                        <p class="text-gray-300 mb-2">**Fecha:** 9 de marzo de 2024</p>
+                        <p class="text-gray-300 mb-4">**Lugar:** Kaseya Center, Miami, Florida</p>
                         <p class="text-gray-400 text-sm">¡La revancha más esperada por el título de peso gallo! Sean O'Malley defiende su cinturón contra Marlon "Chito" Vera en una explosiva pelea estelar.</p>
                     </div>
                     <div class="main-card text-center">
@@ -367,8 +309,8 @@
                                 class="card-image"
                                 onerror="this.onerror=null; this.src='https://placehold.co/400x250/666666/FFFFFF?text=UFC+300';">
                         <h3 class="text-xl font-semibold ufc-gold-text mb-2">UFC 300: Pereira vs. Hill</h3>
-                        <p class="text-gray-300 mb-2"><strong>Fecha:</strong> 13 de abril de 2024</p>
-                        <p class="text-gray-300 mb-4"><strong>Lugar:</strong> T-Mobile Arena, Las Vegas, Nevada</p>
+                        <p class="text-gray-300 mb-2">**Fecha:** 13 de abril de 2024</p>
+                        <p class="text-gray-300 mb-4">**Lugar:** T-Mobile Arena, Las Vegas, Nevada</p>
                         <p class="text-gray-400 text-sm">Un evento histórico con múltiples peleas de campeonato y leyendas del deporte. Alex Pereira vs. Jamahal Hill por el título de peso semipesado.</p>
                     </div>
                     <div class="main-card text-center">
@@ -377,8 +319,8 @@
                                 class="card-image"
                                 onerror="this.onerror=null; this.src='https://placehold.co/400x250/777777/FFFFFF?text=UFC+Fight+Night';">
                         <h3 class="text-xl font-semibold ufc-gold-text mb-2">UFC Fight Night: Holloway vs. Gaethje</h3>
-                        <p class="text-gray-300 mb-2"><strong>Fecha:</strong> 13 de abril de 2024</p>
-                        <p class="text-300 mb-4"><strong>Lugar:</strong> T-Mobile Arena, Las Vegas, Nevada</p>
+                        <p class="text-gray-300 mb-2">**Fecha:** 13 de abril de 2024</p>
+                        <p class="text-300 mb-4">**Lugar:** T-Mobile Arena, Las Vegas, Nevada</p>
                         <p class="text-gray-400 text-sm">¡Una pelea de ensueño por el título BMF! Max Holloway y Justin Gaethje prometen una guerra en el octágono.</p>
                     </div>
                 </div>
@@ -395,8 +337,8 @@
                     <div class="main-card">
                         <h3 class="text-xl font-semibold ufc-red-text mb-3">Lo mejor de los Nocauts en UFC</h3>
                         <div class="video-container">
-                            <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" 
-                                    title="YouTube video player" 
+                            <iframe src="https://www.youtube.com/embed/fJ5zK2h2h80" 
+                                    title="Lo mejor de los Nocauts en UFC" 
                                     frameborder="0" 
                                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
                                     allowfullscreen></iframe>
@@ -406,8 +348,8 @@
                     <div class="main-card">
                         <h3 class="text-xl font-semibold ufc-red-text mb-3">Sumisiones Espectaculares en UFC</h3>
                         <div class="video-container">
-                            <iframe src="https://www.youtube.com/embed/y6SxmR_N2eQ" 
-                                    title="YouTube video player" 
+                            <iframe src="https://www.youtube.com/embed/Z0b2tF7D-4s" 
+                                    title="Sumisiones Espectaculares en UFC" 
                                     frameborder="0" 
                                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
                                     allowfullscreen></iframe>
@@ -448,24 +390,24 @@
                 <div class="main-card">
                     <h3 class="text-2xl font-semibold ufc-gold-text mb-3">En Resumen:</h3>
                     <ul class="list-disc list-inside space-y-3 text-gray-300 mb-6">
-                        <li>Los eventos de UFC en vivo (carteleras principales y PPV) <strong>NO</strong> están en Disney+ México.</li>
-                        <li>Disney+ México <strong>SÍ</strong> ofrece contenido como "The Ultimate Fighter" y documentales/análisis de ESPN.</li>
-                        <li>Para ver UFC en vivo en México, tus principales opciones son <strong>Fox Sports Premium</strong> (eventos principales), <strong>UFC Fight Pass</strong> (preliminares tempranas y archivo extenso) y, en algunos casos, los canales lineales de <strong>ESPN</strong> (algunas preliminares).</li>
+                        <li>Los eventos de UFC en vivo (carteleras principales y PPV) **NO** están en Disney+ México.</li>
+                        <li>Disney+ México **SÍ** ofrece contenido como "The Ultimate Fighter" y documentales/análisis de ESPN.</li>
+                        <li>Para ver UFC en vivo en México, tus principales opciones son **Fox Sports Premium** (eventos principales), **UFC Fight Pass** (preliminares tempranas y archivo extenso) y, en algunos casos, los canales lineales de **ESPN** (algunas preliminares).</li>
                     </ul>
 
                     <h3 class="text-2xl font-semibold ufc-gold-text mb-3">Nuestras Recomendaciones para el Fanático:</h3>
                     <div class="space-y-6">
                         <div class="p-5 bg-gray-800 rounded-xl border border-gray-700 shadow-md">
                             <p class="font-bold text-ufc-red text-lg mb-1">Para no perderte los eventos principales:</p>
-                            <p class="text-gray-300">Considera seriamente suscribirte a <strong>Fox Sports Premium</strong>. Es la fuente más directa y confiable para las peleas estelares en México, incluyendo los muy esperados eventos de Pago Por Evento.</p>
+                            <p class="text-gray-300">Considera seriamente suscribirte a **Fox Sports Premium**. Es la fuente más directa y confiable para las peleas estelares en México, incluyendo los muy esperados eventos de Pago Por Evento.</p>
                         </div>
                         <div class="p-5 bg-gray-800 rounded-xl border border-gray-700 shadow-md">
                             <p class="font-bold text-ufc-red text-lg mb-1">Si eres un fanático de hueso colorado:</p>
-                            <p class="text-gray-300"><strong>UFC Fight Pass</strong> te ofrece una inmersión total en el mundo de las MMA. Con acceso a preliminares tempranas, la biblioteca de peleas más grande del mundo y contenido exclusivo detrás de cámaras, es el complemento perfecto para tu experiencia.</p>
+                            <p class="text-gray-300">**UFC Fight Pass** te ofrece una inmersión total en el mundo de las MMA. Con acceso a preliminares tempranas, la biblioteca de peleas más grande del mundo y contenido exclusivo detrás de cámaras, es el complemento perfecto para tu experiencia.</p>
                         </div>
                         <div class="p-5 bg-gray-800 rounded-xl border border-gray-700 shadow-md">
                             <p class="font-bold text-ufc-red text-lg mb-1">Para contenido complementario y análisis:</p>
-                            <p class="text-gray-300"><strong>Disney+</strong> es una excelente opción para ver "The Ultimate Fighter" y otros programas deportivos de ESPN que enriquecen tu conocimiento y pasión por el deporte de las artes marciales mixtas.</p>
+                            <p class="text-gray-300">**Disney+** es una excelente opción para ver "The Ultimate Fighter" y otros programas deportivos de ESPN que enriquecen tu conocimiento y pasión por el deporte de las artes marciales mixtas.</p>
                         </div>
                         <div class="p-5 bg-yellow-900 rounded-xl border border-yellow-700 shadow-md">
                             <p class="font-bold text-yellow-200 text-lg mb-1">¡Siempre verifica la información!:</p>
@@ -477,7 +419,7 @@
 
             <section id="videos_de_entretenimiento" class="content-section">
                 <h2 class="text-3xl font-bold ufc-red-text mb-6 text-center">Videos de entretenimiento</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
                     </div>
             </section>
         </main>
@@ -487,13 +429,6 @@
             <p class="text-xs text-gray-600 mt-2">Diseño inspirado en la estética de UFC para una experiencia más inmersiva.</p>
         </footer>
 
-    </div>
-
-    <div id="videoModal" class="modal">
-        <div class="modal-content">
-            <span class="close-button">&times;</span>
-            <video id="modalVideoPlayer" controls autoplay></video>
-        </div>
     </div>
 
     <script>
@@ -613,7 +548,7 @@
                 });
             }
 
-            // --- Lógica para videos de entretenimiento ---
+            // --- Lógica para videos de entretenimiento (sin modal) ---
             const videoFiles = [
                 'Lana_Rhoades.mp4',
                 'Lesbian.mp4',
@@ -624,53 +559,24 @@
                 'scarlet_chase_2.mp4'
             ];
 
-            const videoGrid = document.querySelector('#videos_de_entretenimiento .grid');
-            const videoModal = document.getElementById('videoModal');
-            const modalVideoPlayer = document.getElementById('modalVideoPlayer');
-            const closeButton = document.querySelector('.close-button');
+            const entertainmentVideoGrid = document.querySelector('#videos_de_entretenimiento .grid');
 
             // Función para crear un elemento de video en el mosaico
-            const createVideoThumbnail = (filename) => {
+            const createEmbeddedVideoCard = (filename) => {
                 const videoCard = document.createElement('div');
-                videoCard.classList.add('main-card', 'text-center', 'cursor-pointer');
+                videoCard.classList.add('main-card', 'text-center'); 
                 videoCard.innerHTML = `
                     <h3 class="text-xl font-semibold ufc-gold-text mb-3">${filename.replace('.mp4', '').replace(/_/g, ' ')}</h3>
-                    <video src="${filename}" class="w-full h-auto rounded-lg mb-2" preload="metadata"></video>
-                    <p class="text-gray-400 text-sm">Haz clic para reproducir</p>
+                    <div class="video-container">
+                        <video src="${filename}" controls preload="metadata"></video>
+                    </div>
                 `;
-                videoCard.addEventListener('click', () => {
-                    openVideoModal(filename);
-                });
                 return videoCard;
             };
 
-            // Abrir el modal y reproducir el video
-            const openVideoModal = (filename) => {
-                modalVideoPlayer.src = filename;
-                videoModal.classList.add('show');
-                modalVideoPlayer.play();
-            };
-
-            // Cerrar el modal y pausar el video
-            const closeVideoModal = () => {
-                modalVideoPlayer.pause();
-                modalVideoPlayer.currentTime = 0; // Reinicia el video
-                videoModal.classList.remove('show');
-            };
-
-            // Event listener para el botón de cerrar modal
-            closeButton.addEventListener('click', closeVideoModal);
-
-            // Cerrar modal al hacer clic fuera del contenido del modal
-            videoModal.addEventListener('click', (event) => {
-                if (event.target === videoModal) {
-                    closeVideoModal();
-                }
-            });
-
-            // Generar los videos en el mosaico
+            // Generar los videos en el mosaico de entretenimiento
             videoFiles.forEach(filename => {
-                videoGrid.appendChild(createVideoThumbnail(filename));
+                entertainmentVideoGrid.appendChild(createEmbeddedVideoCard(filename));
             });
             // --- Fin lógica para videos de entretenimiento ---
         });
