@@ -132,6 +132,64 @@
             height: 100%;
             border: 0;
         }
+
+        /* Estilos para el modal/ventana flotante */
+        .modal {
+            display: none; /* Oculto por defecto */
+            position: fixed; /* Permanece en su lugar */
+            z-index: 100; /* Se superpone a todo */
+            left: 0;
+            top: 0;
+            width: 100%; /* Ancho completo */
+            height: 100%; /* Altura completa */
+            overflow: auto; /* Habilitar scroll si es necesario */
+            background-color: rgba(0,0,0,0.8); /* Fondo oscuro semitransparente */
+            display: flex; /* Para centrar el contenido */
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .modal.show {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-content {
+            background-color: #1a1a1a;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #333333;
+            width: 90%;
+            max-width: 800px; /* Ancho máximo para el video */
+            border-radius: 1rem;
+            position: relative;
+        }
+
+        .modal-content video {
+            width: 100%;
+            height: auto;
+            border-radius: 0.5rem;
+        }
+
+        .close-button {
+            color: #aaa;
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .close-button:hover,
+        .close-button:focus {
+            color: #f00; /* Rojo UFC al pasar el ratón */
+            text-decoration: none;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body class="bg-gray-900 text-gray-100">
@@ -155,7 +213,7 @@
                 <li><button class="tab-button py-3 px-4 md:py-4 md:px-6 text-sm md:text-base text-gray-300 hover:text-ufc-red border-b-2 border-transparent transition-colors duration-300" data-tab="videos">Momentos Destacados</button></li>
                 <li><button class="tab-button py-3 px-4 md:py-4 md:px-6 text-sm md:text-base text-gray-300 hover:text-ufc-red border-b-2 border-transparent transition-colors duration-300" data-tab="faq">Preguntas Frecuentes</button></li>
                 <li><button class="tab-button py-3 px-4 md:py-4 md:px-6 text-sm md:text-base text-gray-300 hover:text-ufc-red border-b-2 border-transparent transition-colors duration-300" data-tab="recomendaciones">Recomendaciones</button></li>
-                <li><button class="tab-button py-3 px-4 md:py-4 md:px-6 text-sm md:text-base text-gray-300 hover:text-ufc-red border-b-2 border-transparent transition-colors duration-300" data-tab="videos_de_entretenimineto">Videos de entretenimineto</button></li>
+                <li><button class="tab-button py-3 px-4 md:py-4 md:px-6 text-sm md:text-base text-gray-300 hover:text-ufc-red border-b-2 border-transparent transition-colors duration-300" data-tab="videos_de_entretenimiento">Videos de entretenimiento</button></li>
             </ul>
         </nav>
 
@@ -337,7 +395,7 @@
                     <div class="main-card">
                         <h3 class="text-xl font-semibold ufc-red-text mb-3">Lo mejor de los Nocauts en UFC</h3>
                         <div class="video-container">
-                            <iframe src="https://www.youtube.com/embed/your_youtube_video_id_1" 
+                            <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" 
                                     title="YouTube video player" 
                                     frameborder="0" 
                                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
@@ -348,7 +406,7 @@
                     <div class="main-card">
                         <h3 class="text-xl font-semibold ufc-red-text mb-3">Sumisiones Espectaculares en UFC</h3>
                         <div class="video-container">
-                            <iframe src="https://www.youtube.com/embed/your_youtube_video_id_2" 
+                            <iframe src="https://www.youtube.com/embed/y6SxmR_N2eQ" 
                                     title="YouTube video player" 
                                     frameborder="0" 
                                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
@@ -417,11 +475,10 @@
                 </div>
             </section>
 
-            <section id="videos_de_entretenimineto" class="content-section">
+            <section id="videos_de_entretenimiento" class="content-section">
                 <h2 class="text-3xl font-bold ufc-red-text mb-6 text-center">Videos de entretenimiento</h2>
-                <div class="main-card flex justify-center">
-                    <video src="Lesbian_10.mp4" width="640" height="360" controls class="rounded-lg shadow-lg"></video>
-                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    </div>
             </section>
         </main>
 
@@ -430,6 +487,13 @@
             <p class="text-xs text-gray-600 mt-2">Diseño inspirado en la estética de UFC para una experiencia más inmersiva.</p>
         </footer>
 
+    </div>
+
+    <div id="videoModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <video id="modalVideoPlayer" controls autoplay></video>
+        </div>
     </div>
 
     <script>
@@ -548,6 +612,67 @@
                     }
                 });
             }
+
+            // --- Lógica para videos de entretenimiento ---
+            const videoFiles = [
+                'Lana_Rhoades.mp4',
+                'Lesbian.mp4',
+                'No_Hard_Feelings.mp4',
+                'american_pie.mp4',
+                'celia_lora.mp4',
+                'scarlet_chase.mp4',
+                'scarlet_chase_2.mp4'
+            ];
+
+            const videoGrid = document.querySelector('#videos_de_entretenimiento .grid');
+            const videoModal = document.getElementById('videoModal');
+            const modalVideoPlayer = document.getElementById('modalVideoPlayer');
+            const closeButton = document.querySelector('.close-button');
+
+            // Función para crear un elemento de video en el mosaico
+            const createVideoThumbnail = (filename) => {
+                const videoCard = document.createElement('div');
+                videoCard.classList.add('main-card', 'text-center', 'cursor-pointer');
+                videoCard.innerHTML = `
+                    <h3 class="text-xl font-semibold ufc-gold-text mb-3">${filename.replace('.mp4', '').replace(/_/g, ' ')}</h3>
+                    <video src="${filename}" class="w-full h-auto rounded-lg mb-2" preload="metadata"></video>
+                    <p class="text-gray-400 text-sm">Haz clic para reproducir</p>
+                `;
+                videoCard.addEventListener('click', () => {
+                    openVideoModal(filename);
+                });
+                return videoCard;
+            };
+
+            // Abrir el modal y reproducir el video
+            const openVideoModal = (filename) => {
+                modalVideoPlayer.src = filename;
+                videoModal.classList.add('show');
+                modalVideoPlayer.play();
+            };
+
+            // Cerrar el modal y pausar el video
+            const closeVideoModal = () => {
+                modalVideoPlayer.pause();
+                modalVideoPlayer.currentTime = 0; // Reinicia el video
+                videoModal.classList.remove('show');
+            };
+
+            // Event listener para el botón de cerrar modal
+            closeButton.addEventListener('click', closeVideoModal);
+
+            // Cerrar modal al hacer clic fuera del contenido del modal
+            videoModal.addEventListener('click', (event) => {
+                if (event.target === videoModal) {
+                    closeVideoModal();
+                }
+            });
+
+            // Generar los videos en el mosaico
+            videoFiles.forEach(filename => {
+                videoGrid.appendChild(createVideoThumbnail(filename));
+            });
+            // --- Fin lógica para videos de entretenimiento ---
         });
     </script>
 </body>
