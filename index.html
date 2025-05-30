@@ -3,210 +3,342 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UFC en Disney+ México: Guía Interactiva</title>
+    <title>UFC en México: Tu Guía Definitiva de Streaming</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- Visualization & Content Choices: 
-        - Resumen: Declaración textual clara y un ícono. Goal: Informar inmediatamente.
-        - Contenido en Disney+: Tarjetas HTML. Goal: Detallar la oferta.
-        - Dónde Ver en Vivo (Tabla 1): Tabla HTML estructurada y tarjetas. Goal: Comparar alternativas. Interaction: Clara separación visual.
-        - Comparativa Regional (Tabla 2): Gráfico de barras con Chart.js (México vs. LATAM). Goal: Comparar visualmente. Interaction: Tooltips del gráfico. Library: Chart.js.
-        - Conclusiones y Recomendaciones: Texto HTML. Goal: Aconsejar.
-        - Justification: Los métodos elegidos son directos, claros y evitan interacciones complejas para esta SPA informativa. Chart.js para la comparación regional ofrece una rápida comprensión visual. NO se utiliza SVG/Mermaid. -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
+        /* Estilos personalizados para la tipografía y el fondo, emulando la estética de UFC */
         body {
             font-family: 'Inter', sans-serif;
+            background-color: #0d0d0d; /* Fondo oscuro para un look más agresivo */
+            color: #f0f0f0; /* Texto claro para contraste */
+            overflow-x: hidden; /* Evita el scroll horizontal */
         }
+
+        /* Colores personalizados inspirados en UFC */
+        .ufc-red { background-color: #cc0000; }
+        .ufc-red-text { color: #cc0000; }
+        .ufc-gold { background-color: #d4af37; }
+        .ufc-gold-text { color: #d4af37; }
+        .ufc-gray { background-color: #333333; }
+        .ufc-gray-text { color: #aaaaaa; }
+
+        /* Estilo para el botón de pestaña activo */
         .tab-active {
-            border-bottom-color: #0284c7; /* sky-600 */
-            color: #0284c7;
-            font-weight: 600;
+            border-bottom-color: #cc0000; /* Rojo UFC para la pestaña activa */
+            color: #cc0000;
+            font-weight: 700; /* Más negrita */
         }
+
+        /* Oculta las secciones de contenido por defecto */
         .content-section {
             display: none;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out; /* Transición suave para la aparición */
         }
+
+        /* Muestra la sección de contenido activa con una animación de fade-in */
         .content-section.active {
             display: block;
+            opacity: 1;
         }
+
+        /* Contenedor del gráfico para asegurar responsividad */
         .chart-container {
             position: relative;
             width: 100%;
-            max-width: 600px; /* max-w-2xl */
+            max-width: 700px; /* Ancho máximo para el gráfico */
             margin-left: auto;
             margin-right: auto;
-            height: 300px; /* Base height */
-            max-height: 400px;
+            height: 350px; /* Altura base del gráfico */
+            max-height: 450px;
         }
+
+        /* Ajustes de altura del gráfico para pantallas medianas */
         @media (min-width: 768px) { /* md breakpoint */
             .chart-container {
-                height: 350px;
+                height: 400px;
             }
         }
+
+        /* Estilo para los iconos de encabezado */
         .header-icon {
-            font-size: 3rem;
+            font-size: 4rem; /* Iconos más grandes */
             line-height: 1;
+            color: #cc0000; /* Color rojo UFC */
         }
+
+        /* Estilo general para las tarjetas de contenido */
         .main-card {
-            background-color: white;
-            border-radius: 0.5rem; /* rounded-lg */
-            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1); /* shadow-md */
-            padding: 1.5rem; /* p-6 */
-            margin-bottom: 1.5rem; /* mb-6 */
+            background-color: #1a1a1a; /* Fondo oscuro para las tarjetas */
+            border-radius: 1rem; /* Bordes más redondeados */
+            box-shadow: 0 8px 16px -4px rgba(0, 0, 0, 0.4); /* Sombra más pronunciada */
+            padding: 2rem; /* Más padding */
+            margin-bottom: 2rem; /* Más margen inferior */
+            border: 1px solid #333333; /* Borde sutil */
+            transition: transform 0.3s ease, box-shadow 0.3s ease; /* Transición para hover */
+        }
+
+        /* Efecto hover para las tarjetas */
+        .main-card:hover {
+            transform: translateY(-5px); /* Pequeño levantamiento */
+            box-shadow: 0 12px 24px -6px rgba(0, 0, 0, 0.6); /* Sombra más intensa */
+        }
+
+        /* Estilo para el banner de encabezado */
+        .header-banner {
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://placehold.co/1200x300/000000/FFFFFF?text=UFC+Mexico+Arena') no-repeat center center;
+            background-size: cover;
+            padding: 4rem 0;
+            border-radius: 1rem;
+            margin-bottom: 2rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+        }
+
+        /* Estilo para las imágenes dentro de las tarjetas */
+        .card-image {
+            border-radius: 0.75rem; /* Bordes redondeados para imágenes */
+            margin-bottom: 1rem;
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+        }
+
+        /* Animación de rotación para el icono de octágono */
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .animate-spin-slow {
+            animation: spin 10s linear infinite; /* Animación de rotación lenta */
         }
     </style>
 </head>
-<body class="bg-slate-100 text-slate-800">
+<body class="bg-gray-900 text-gray-100">
 
-    <div class="container mx-auto p-4 md:p-8 max-w-5xl">
-        <header class="text-center mb-8">
-            <h1 class="text-3xl md:text-4xl font-bold text-sky-700 mb-2">UFC en México: Tu Guía de Streaming</h1>
-            <p class="text-lg text-slate-600">Descubre dónde y cómo ver los eventos de UFC y contenido relacionado.</p>
+    <div class="container mx-auto p-4 md:p-8 max-w-6xl">
+        <header class="text-center header-banner">
+            <h1 class="text-4xl md:text-6xl font-extrabold text-white mb-4 leading-tight">
+                <i class="fas fa-octagon ufc-red-text animate-spin-slow text-5xl md:text-7xl mr-3"></i>
+                UFC en México: Tu Guía Definitiva
+            </h1>
+            <p class="text-xl text-gray-300">Descubre dónde y cómo ver los eventos de UFC y contenido relacionado.</p>
         </header>
 
-        <nav class="mb-8 bg-white shadow-md rounded-lg">
-            <ul class="flex flex-wrap justify-center md:justify-start border-b border-slate-200">
-                <li><button class="tab-button py-3 px-4 md:py-4 md:px-6 text-sm md:text-base text-slate-600 hover:text-sky-600 border-b-2 border-transparent" data-tab="inicio">Inicio</button></li>
-                <li><button class="tab-button py-3 px-4 md:py-4 md:px-6 text-sm md:text-base text-slate-600 hover:text-sky-600 border-b-2 border-transparent" data-tab="disneyplus">¿Qué hay en Disney+?</button></li>
-                <li><button class="tab-button py-3 px-4 md:py-4 md:px-6 text-sm md:text-base text-slate-600 hover:text-sky-600 border-b-2 border-transparent" data-tab="dondever">Dónde Ver en Vivo</button></li>
-                <li><button class="tab-button py-3 px-4 md:py-4 md:px-6 text-sm md:text-base text-slate-600 hover:text-sky-600 border-b-2 border-transparent" data-tab="comparativa">Comparativa Regional</button></li>
-                <li><button class="tab-button py-3 px-4 md:py-4 md:px-6 text-sm md:text-base text-slate-600 hover:text-sky-600 border-b-2 border-transparent" data-tab="recomendaciones">Recomendaciones</button></li>
+        <nav class="mb-8 bg-gray-800 shadow-xl rounded-xl">
+            <ul class="flex flex-wrap justify-center md:justify-start border-b border-gray-700">
+                <li><button class="tab-button py-3 px-4 md:py-4 md:px-6 text-sm md:text-base text-gray-300 hover:text-ufc-red border-b-2 border-transparent transition-colors duration-300" data-tab="inicio">Inicio</button></li>
+                <li><button class="tab-button py-3 px-4 md:py-4 md:px-6 text-sm md:text-base text-gray-300 hover:text-ufc-red border-b-2 border-transparent transition-colors duration-300" data-tab="disneyplus">¿Qué hay en Disney+?</button></li>
+                <li><button class="tab-button py-3 px-4 md:py-4 md:px-6 text-sm md:text-base text-gray-300 hover:text-ufc-red border-b-2 border-transparent transition-colors duration-300" data-tab="dondever">Dónde Ver en Vivo</button></li>
+                <li><button class="tab-button py-3 px-4 md:py-4 md:px-6 text-sm md:text-base text-gray-300 hover:text-ufc-red border-b-2 border-transparent transition-colors duration-300" data-tab="comparativa">Comparativa Regional</button></li>
+                <li><button class="tab-button py-3 px-4 md:py-4 md:px-6 text-sm md:text-base text-gray-300 hover:text-ufc-red border-b-2 border-transparent transition-colors duration-300" data-tab="proximos">Próximos Eventos</button></li>
+                <li><button class="tab-button py-3 px-4 md:py-4 md:px-6 text-sm md:text-base text-gray-300 hover:text-ufc-red border-b-2 border-transparent transition-colors duration-300" data-tab="faq">Preguntas Frecuentes</button></li>
+                <li><button class="tab-button py-3 px-4 md:py-4 md:px-6 text-sm md:text-base text-gray-300 hover:text-ufc-red border-b-2 border-transparent transition-colors duration-300" data-tab="recomendaciones">Recomendaciones</button></li>
             </ul>
         </nav>
 
         <main>
             <section id="inicio" class="content-section active">
                 <div class="main-card text-center">
-                    <div class="header-icon text-red-500 mb-4">🚫</div>
-                    <h2 class="text-2xl font-semibold text-sky-700 mb-3">Eventos UFC en Vivo: No en Disney+ México</h2>
-                    <p class="text-lg text-slate-700 mb-4">
-                        Directo al grano: los eventos en vivo de UFC, incluyendo Pago Por Evento (PPV) y carteleras principales, **no están disponibles en Disney+ en México**. Esto se debe a acuerdos de licencia regionales específicos.
+                    <img src="https://placehold.co/800x450/8B0000/FFFFFF?text=UFC+No+en+Disney%2B+MX" alt="Imagen de un luchador de UFC con un signo de prohibido" class="card-image mx-auto max-w-md">
+                    <h2 class="text-3xl font-bold ufc-red-text mb-3">Eventos UFC en Vivo: ¡No en Disney+ México!</h2>
+                    <p class="text-lg text-gray-300 mb-4">
+                        Directo al grano: los eventos en vivo de UFC, incluyendo Pago Por Evento (PPV) y carteleras principales, <strong>no están disponibles en Disney+ en México</strong>. Esto se debe a acuerdos de licencia regionales específicos que otorgan los derechos de transmisión a otras plataformas en el país.
                     </p>
-                    <p class="text-md text-slate-600">
-                        ¡Pero no te preocupes! Hay otras formas de ver la acción. Esta guía te mostrará qué contenido de UFC SÍ puedes encontrar en Disney+ y cuáles son tus mejores opciones para ver las peleas en vivo en México.
+                    <p class="text-md text-gray-400">
+                        ¡Pero no te preocupes! Hay otras formas de ver la acción. Esta guía te mostrará qué contenido de UFC SÍ puedes encontrar en Disney+ y cuáles son tus mejores opciones para ver las peleas en vivo en México. ¡Prepárate para la octágono!
                     </p>
                 </div>
-                <div class="bg-sky-50 border border-sky-200 text-sky-700 px-4 py-3 rounded-lg relative" role="alert">
-                  <strong class="font-bold">Dato Clave:</strong>
-                  <span class="block sm:inline"> Fox Sports Premium es el principal canal para UFC en vivo en México.</span>
+                <div class="bg-yellow-900 border border-yellow-700 text-yellow-200 px-6 py-4 rounded-xl relative mt-8" role="alert">
+                    <strong class="font-bold text-lg">Dato Clave:</strong>
+                    <span class="block sm:inline ml-2"> Fox Sports Premium es el principal canal para UFC en vivo en México.</span>
                 </div>
             </section>
 
             <section id="disneyplus" class="content-section">
-                <h2 class="text-2xl font-semibold text-sky-700 mb-6 text-center">Contenido de UFC y MMA en Disney+ México</h2>
-                <p class="text-slate-600 mb-8 text-center">Aunque los eventos en vivo no están, Disney+ en México sí ofrece contenido valioso para los fans de las MMA a través de la integración con ESPN:</p>
-                <div class="grid md:grid-cols-2 gap-6">
+                <h2 class="text-3xl font-bold ufc-gold-text mb-6 text-center">Contenido de UFC y MMA en Disney+ México</h2>
+                <p class="text-gray-300 mb-8 text-center text-lg">Aunque los eventos en vivo no están, Disney+ en México sí ofrece contenido valioso para los fans de las MMA a través de la integración con ESPN:</p>
+                <div class="grid md:grid-cols-2 gap-8">
                     <div class="main-card">
-                        <h3 class="text-xl font-semibold text-sky-600 mb-2">The Ultimate Fighter (TUF)</h3>
-                        <p class="text-slate-700 mb-2">
-                            Disfruta de temporadas de la icónica serie de telerrealidad "The Ultimate Fighter", donde prospectos de MMA compiten por un contrato con UFC.
+                        <img src="https://placehold.co/500x300/333333/FFFFFF?text=The+Ultimate+Fighter" alt="Imagen de The Ultimate Fighter" class="card-image">
+                        <h3 class="text-2xl font-semibold ufc-gold-text mb-2">The Ultimate Fighter (TUF)</h3>
+                        <p class="text-gray-300 mb-2">
+                            Disfruta de temporadas completas de la icónica serie de telerrealidad "The Ultimate Fighter". Aquí, prometedores talentos de MMA compiten en un formato de eliminación directa por un codiciado contrato con la UFC. Revive momentos clásicos y descubre a las futuras leyendas del octágono.
                         </p>
-                        <p class="text-sm text-slate-500">Ideal para conocer a futuras estrellas y el drama detrás de las peleas.</p>
+                        <p class="text-sm text-gray-500">Ideal para conocer a futuras estrellas, el drama detrás de las peleas y la evolución del deporte.</p>
                     </div>
                     <div class="main-card">
-                        <h3 class="text-xl font-semibold text-sky-600 mb-2">Documentales y Análisis de ESPN</h3>
-                        <p class="text-slate-700 mb-2">
-                            Accede a una selección de documentales deportivos de alta calidad de ESPN, como la serie "30 for 30", y programas de análisis y noticias como "SportsCenter".
+                        <img src="https://placehold.co/500x300/444444/FFFFFF?text=ESPN+Documentales" alt="Imagen de documentales de ESPN" class="card-image">
+                        <h3 class="text-2xl font-semibold ufc-gold-text mb-2">Documentales y Análisis de ESPN</h3>
+                        <p class="text-gray-300 mb-2">
+                            Accede a una selección de documentales deportivos de alta calidad de ESPN, incluyendo episodios de la aclamada serie "30 for 30". También encontrarás programas de análisis y noticias como "SportsCenter", que a menudo cubren el mundo de las MMA.
                         </p>
-                        <p class="text-sm text-slate-500">Este contenido puede incluir perfiles de luchadores, resúmenes de eventos pasados y discusiones sobre el mundo de las MMA.</p>
+                        <p class="text-sm text-gray-500">Este contenido puede incluir perfiles profundos de luchadores, resúmenes de eventos pasados, análisis tácticos y discusiones sobre las últimas noticias del universo UFC.</p>
                     </div>
                 </div>
-                 <p class="mt-6 text-center text-slate-600 text-sm">
+                <p class="mt-8 text-center text-gray-400 text-md">
                     Este contenido te permite profundizar en el deporte, conocer historias y análisis, complementando la experiencia de ver los eventos en vivo en otras plataformas.
                 </p>
             </section>
 
             <section id="dondever" class="content-section">
-                <h2 class="text-2xl font-semibold text-sky-700 mb-6 text-center">Plataformas para Ver UFC en Vivo en México</h2>
-                <p class="text-slate-600 mb-8 text-center">Aquí te presentamos las principales opciones para no perderte ni un golpe de los eventos de UFC en México:</p>
+                <h2 class="text-3xl font-bold ufc-red-text mb-6 text-center">Plataformas para Ver UFC en Vivo en México</h2>
+                <p class="text-gray-300 mb-8 text-center text-lg">Aquí te presentamos las principales opciones para no perderte ni un golpe de los eventos de UFC en México:</p>
                 
-                <div class="overflow-x-auto bg-white shadow-md rounded-lg mb-8">
-                    <table class="w-full text-sm text-left text-slate-500">
-                        <thead class="text-xs text-slate-700 uppercase bg-slate-50">
+                <div class="overflow-x-auto bg-gray-800 shadow-xl rounded-xl mb-8">
+                    <table class="w-full text-sm text-left text-gray-300">
+                        <thead class="text-xs text-gray-400 uppercase bg-gray-700">
                             <tr>
                                 <th scope="col" class="px-6 py-3">Plataforma</th>
                                 <th scope="col" class="px-6 py-3">Tipo de Contenido UFC</th>
-                                <th scope="col" class="px-6 py-3">Notas</th>
+                                <th scope="col" class="px-6 py-3">Notas Clave</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr class="bg-white border-b">
-                                <th scope="row" class="px-6 py-4 font-medium text-slate-900 whitespace-nowrap">Fox Sports Premium</th>
+                            <tr class="bg-gray-800 border-b border-gray-700 hover:bg-gray-700 transition-colors duration-200">
+                                <th scope="row" class="px-6 py-4 font-medium text-white whitespace-nowrap">
+                                    <img src="https://placehold.co/100x50/FF4500/FFFFFF?text=Fox+Sports" alt="Logo de Fox Sports Premium" class="inline-block h-8 mr-2"> Fox Sports Premium
+                                </th>
                                 <td class="px-6 py-4">Eventos en vivo (PPV/Cartelera Principal)</td>
-                                <td class="px-6 py-4">Principal transmisor en México. Requiere suscripción (TV de pago o streaming).</td>
+                                <td class="px-6 py-4">Principal transmisor en México. Requiere suscripción (TV de pago o streaming). Es tu mejor opción para las peleas estelares.</td>
                             </tr>
-                            <tr class="bg-slate-50 border-b">
-                                <th scope="row" class="px-6 py-4 font-medium text-slate-900 whitespace-nowrap">UFC Fight Pass</th>
+                            <tr class="bg-gray-900 border-b border-gray-700 hover:bg-gray-700 transition-colors duration-200">
+                                <th scope="row" class="px-6 py-4 font-medium text-white whitespace-nowrap">
+                                    <img src="https://placehold.co/100x50/B22222/FFFFFF?text=Fight+Pass" alt="Logo de UFC Fight Pass" class="inline-block h-8 mr-2"> UFC Fight Pass
+                                </th>
                                 <td class="px-6 py-4">Preliminares Tempranas, Biblioteca de peleas, Contenido exclusivo</td>
-                                <td class="px-6 py-4">Servicio de streaming oficial de UFC. Suscripción independiente. Ideal para fans dedicados.</td>
+                                <td class="px-6 py-4">Servicio de streaming oficial de UFC. Suscripción independiente. Indispensable para los fans más dedicados, ofrece acceso a todo el archivo de peleas.</td>
                             </tr>
-                            <tr class="bg-white border-b">
-                                <th scope="row" class="px-6 py-4 font-medium text-slate-900 whitespace-nowrap">ESPN (Canales Lineales)</th>
+                            <tr class="bg-gray-800 border-b border-gray-700 hover:bg-gray-700 transition-colors duration-200">
+                                <th scope="row" class="px-6 py-4 font-medium text-white whitespace-nowrap">
+                                    <img src="https://placehold.co/100x50/1A1A1A/FFFFFF?text=ESPN" alt="Logo de ESPN" class="inline-block h-8 mr-2"> ESPN (Canales Lineales)
+                                </th>
                                 <td class="px-6 py-4">Algunas Preliminares, Contenido de análisis/noticias</td>
-                                <td class="px-6 py-4">Disponible vía proveedores de TV de pago. Consultar programación.</td>
+                                <td class="px-6 py-4">Disponible vía proveedores de TV de pago. Consulta la programación local, ya que no todos los eventos son transmitidos en vivo en estos canales.</td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
-                <p class="mt-6 text-center text-slate-600 text-sm">
-                    Recuerda verificar la programación específica de cada evento, ya que la distribución puede variar.
+                <p class="mt-6 text-center text-gray-400 text-md">
+                    Recuerda verificar la programación específica de cada evento, ya que la distribución puede variar. ¡No te quedes fuera del octágono!
                 </p>
             </section>
 
             <section id="comparativa" class="content-section">
-                <h2 class="text-2xl font-semibold text-sky-700 mb-6 text-center">UFC en Disney+: México vs. Otros Países de LATAM</h2>
-                <p class="text-slate-600 mb-8 text-center">La disponibilidad de UFC en vivo en Disney+ varía significativamente en Latinoamérica. Mientras que en México no se transmiten los eventos principales en esta plataforma, en muchos otros países de la región sí es posible gracias a la integración de ESPN KNOCKOUT.</p>
+                <h2 class="text-3xl font-bold ufc-gold-text mb-6 text-center">UFC en Disney+: México vs. Otros Países de LATAM</h2>
+                <p class="text-gray-300 mb-8 text-center text-lg">La disponibilidad de UFC en vivo en Disney+ varía significativamente en Latinoamérica. Mientras que en México no se transmiten los eventos principales en esta plataforma, en muchos otros países de la región sí es posible gracias a la integración de ESPN KNOCKOUT.</p>
                 
                 <div class="main-card">
-                    <h3 class="text-xl font-semibold text-sky-600 mb-4 text-center">Disponibilidad de UFC en Vivo en Disney+</h3>
+                    <h3 class="text-2xl font-semibold ufc-gold-text mb-4 text-center">Disponibilidad de UFC en Vivo en Disney+</h3>
                     <div class="chart-container">
                         <canvas id="regionalChart"></canvas>
                     </div>
-                    <p class="mt-4 text-sm text-slate-500 text-center">Este gráfico ilustra cómo México difiere de otros países seleccionados de Latinoamérica en cuanto al acceso a UFC en vivo por Disney+.</p>
+                    <p class="mt-4 text-sm text-gray-500 text-center">Este gráfico ilustra cómo México difiere de otros países seleccionados de Latinoamérica en cuanto al acceso a UFC en vivo por Disney+.</p>
                 </div>
 
-                <div class="mt-8 bg-white shadow-md rounded-lg p-6">
-                    <h4 class="text-lg font-semibold text-sky-600 mb-3">¿Por qué la diferencia?</h4>
-                    <p class="text-slate-700">
-                        Las diferencias se deben a los acuerdos de derechos de transmisión que son específicos para cada país o región. En México, Fox Sports Premium posee los derechos principales para los eventos en vivo de UFC, mientras que en otros países de Latinoamérica, Disney (a través de ESPN) ha consolidado estos derechos para su plataforma Disney+.
+                <div class="mt-8 bg-gray-800 shadow-xl rounded-xl p-6 border border-gray-700">
+                    <h4 class="text-xl font-semibold ufc-gold-text mb-3">¿Por qué la diferencia regional?</h4>
+                    <p class="text-gray-300">
+                        Las diferencias se deben principalmente a los complejos acuerdos de derechos de transmisión que son específicos para cada país o región. En México, Fox Sports Premium ha asegurado los derechos principales para los eventos en vivo de UFC, lo que restringe la capacidad de Disney+ para ofrecer el mismo contenido en vivo que en otros territorios. En contraste, en muchos otros países de Latinoamérica, Disney (a través de su marca ESPN y el bloque ESPN KNOCKOUT) ha logrado consolidar estos derechos para su plataforma Disney+, ofreciendo una experiencia más completa a sus suscriptores.
                     </p>
                 </div>
             </section>
 
+            <section id="proximos" class="content-section">
+                <h2 class="text-3xl font-bold ufc-red-text mb-6 text-center">Próximos Eventos Destacados de UFC</h2>
+                <p class="text-gray-300 mb-8 text-center text-lg">Mantente al tanto de las próximas peleas que no querrás perderte. ¡La acción no para!</p>
+                
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="main-card text-center">
+                        <img src="https://placehold.co/400x250/555555/FFFFFF?text=UFC+299" alt="Poster UFC 299" class="card-image">
+                        <h3 class="text-xl font-semibold ufc-gold-text mb-2">UFC 299: O'Malley vs. Vera 2</h3>
+                        <p class="text-gray-300 mb-2"><strong>Fecha:</strong> 9 de marzo de 2024</p>
+                        <p class="text-gray-300 mb-4"><strong>Lugar:</strong> Kaseya Center, Miami, Florida</p>
+                        <p class="text-gray-400 text-sm">¡La revancha más esperada por el título de peso gallo! Sean O'Malley defiende su cinturón contra Marlon "Chito" Vera en una explosiva pelea estelar.</p>
+                    </div>
+                    <div class="main-card text-center">
+                        <img src="https://placehold.co/400x250/666666/FFFFFF?text=UFC+300" alt="Poster UFC 300" class="card-image">
+                        <h3 class="text-xl font-semibold ufc-gold-text mb-2">UFC 300: Pereira vs. Hill</h3>
+                        <p class="text-gray-300 mb-2"><strong>Fecha:</strong> 13 de abril de 2024</p>
+                        <p class="text-gray-300 mb-4"><strong>Lugar:</strong> T-Mobile Arena, Las Vegas, Nevada</p>
+                        <p class="text-gray-400 text-sm">Un evento histórico con múltiples peleas de campeonato y leyendas del deporte. Alex Pereira vs. Jamahal Hill por el título de peso semipesado.</p>
+                    </div>
+                    <div class="main-card text-center">
+                        <img src="https://placehold.co/400x250/777777/FFFFFF?text=UFC+Fight+Night" alt="Poster UFC Fight Night" class="card-image">
+                        <h3 class="text-xl font-semibold ufc-gold-text mb-2">UFC Fight Night: Holloway vs. Gaethje</h3>
+                        <p class="text-gray-300 mb-2"><strong>Fecha:</strong> 13 de abril de 2024</p>
+                        <p class="text-gray-300 mb-4"><strong>Lugar:</strong> T-Mobile Arena, Las Vegas, Nevada</p>
+                        <p class="text-gray-400 text-sm">¡Una pelea de ensueño por el título BMF! Max Holloway y Justin Gaethje prometen una guerra en el octágono.</p>
+                    </div>
+                </div>
+                <p class="mt-8 text-center text-gray-500 text-sm">
+                    *Las fechas y carteleras están sujetas a cambios. Consulta las fuentes oficiales de UFC para la información más actualizada.
+                </p>
+            </section>
+
+            <section id="faq" class="content-section">
+                <h2 class="text-3xl font-bold ufc-gold-text mb-6 text-center">Preguntas Frecuentes (FAQ)</h2>
+                <p class="text-gray-300 mb-8 text-center text-lg">Aquí respondemos algunas de las preguntas más comunes sobre cómo ver UFC en México.</p>
+
+                <div class="space-y-6">
+                    <div class="main-card">
+                        <h3 class="text-xl font-semibold ufc-red-text mb-3">¿Por qué no puedo ver UFC en vivo en Disney+ México si tengo ESPN en mi paquete de TV?</h3>
+                        <p class="text-gray-300">
+                            Aunque Disney+ integra contenido de ESPN, los derechos de transmisión en vivo de UFC en México están licenciados exclusivamente a Fox Sports Premium. Esto significa que, incluso si tienes una suscripción a ESPN a través de tu proveedor de TV, los eventos principales de UFC no se transmitirán en vivo por Disney+ en México.
+                        </p>
+                    </div>
+                    <div class="main-card">
+                        <h3 class="text-xl font-semibold ufc-red-text mb-3">¿UFC Fight Pass transmite las carteleras principales en México?</h3>
+                        <p class="text-gray-300">
+                            UFC Fight Pass en México transmite las preliminares tempranas y una vasta biblioteca de peleas pasadas, documentales y contenido exclusivo. Sin embargo, las carteleras principales y los eventos de Pago Por Evento (PPV) no están disponibles en vivo en Fight Pass en México, ya que esos derechos pertenecen a Fox Sports Premium.
+                        </p>
+                    </div>
+                    <div class="main-card">
+                        <h3 class="text-xl font-semibold ufc-red-text mb-3">¿Hay alguna forma legal de ver los PPV de UFC sin Fox Sports Premium en México?</h3>
+                        <p class="text-gray-300">
+                            Actualmente, Fox Sports Premium es la principal y casi exclusiva plataforma legal para ver los eventos de Pago Por Evento (PPV) de UFC en México. No hay otras plataformas de streaming que ofrezcan estos eventos en vivo en el país.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
             <section id="recomendaciones" class="content-section">
-                <h2 class="text-2xl font-semibold text-sky-700 mb-6 text-center">Conclusiones y Recomendaciones Finales</h2>
+                <h2 class="text-3xl font-bold ufc-red-text mb-6 text-center">Conclusiones y Recomendaciones Finales</h2>
                 <div class="main-card">
-                    <h3 class="text-xl font-semibold text-sky-600 mb-3">En Resumen:</h3>
-                    <ul class="list-disc list-inside space-y-2 text-slate-700 mb-6">
-                        <li>Los eventos de UFC en vivo (carteleras principales y PPV) **NO** están en Disney+ México.</li>
-                        <li>Disney+ México **SÍ** ofrece contenido como "The Ultimate Fighter" y documentales/análisis de ESPN.</li>
-                        <li>Para ver UFC en vivo en México, tus principales opciones son **Fox Sports Premium** (eventos principales), **UFC Fight Pass** (preliminares tempranas y archivo extenso) y, en algunos casos, los canales lineales de **ESPN** (algunas preliminares).</li>
+                    <h3 class="text-2xl font-semibold ufc-gold-text mb-3">En Resumen:</h3>
+                    <ul class="list-disc list-inside space-y-3 text-gray-300 mb-6">
+                        <li>Los eventos de UFC en vivo (carteleras principales y PPV) <strong>NO</strong> están en Disney+ México.</li>
+                        <li>Disney+ México <strong>SÍ</strong> ofrece contenido como "The Ultimate Fighter" y documentales/análisis de ESPN.</li>
+                        <li>Para ver UFC en vivo en México, tus principales opciones son <strong>Fox Sports Premium</strong> (eventos principales), <strong>UFC Fight Pass</strong> (preliminares tempranas y archivo extenso) y, en algunos casos, los canales lineales de <strong>ESPN</strong> (algunas preliminares).</li>
                     </ul>
 
-                    <h3 class="text-xl font-semibold text-sky-600 mb-3">Nuestras Recomendaciones:</h3>
-                    <div class="space-y-4">
-                        <div class="p-4 bg-sky-50 rounded-lg border border-sky-200">
-                            <p class="font-semibold text-sky-700">Para no perderte los eventos principales:</p>
-                            <p class="text-slate-700">Considera suscribirte a Fox Sports Premium. Es la fuente más directa para las peleas estelares en México.</p>
+                    <h3 class="text-2xl font-semibold ufc-gold-text mb-3">Nuestras Recomendaciones para el Fanático:</h3>
+                    <div class="space-y-6">
+                        <div class="p-5 bg-gray-800 rounded-xl border border-gray-700 shadow-md">
+                            <p class="font-bold text-ufc-red text-lg mb-1">Para no perderte los eventos principales:</p>
+                            <p class="text-gray-300">Considera seriamente suscribirte a <strong>Fox Sports Premium</strong>. Es la fuente más directa y confiable para las peleas estelares en México, incluyendo los muy esperados eventos de Pago Por Evento.</p>
                         </div>
-                        <div class="p-4 bg-sky-50 rounded-lg border border-sky-200">
-                            <p class="font-semibold text-sky-700">Si eres un fanático de hueso colorado:</p>
-                            <p class="text-slate-700">UFC Fight Pass te ofrece una inmersión total con preliminares tempranas, la biblioteca de peleas más grande del mundo y contenido exclusivo.</p>
+                        <div class="p-5 bg-gray-800 rounded-xl border border-gray-700 shadow-md">
+                            <p class="font-bold text-ufc-red text-lg mb-1">Si eres un fanático de hueso colorado:</p>
+                            <p class="text-gray-300"><strong>UFC Fight Pass</strong> te ofrece una inmersión total en el mundo de las MMA. Con acceso a preliminares tempranas, la biblioteca de peleas más grande del mundo y contenido exclusivo detrás de cámaras, es el complemento perfecto para tu experiencia.</p>
                         </div>
-                        <div class="p-4 bg-sky-50 rounded-lg border border-sky-200">
-                            <p class="font-semibold text-sky-700">Para contenido complementario y análisis:</p>
-                            <p class="text-slate-700">Disney+ es una buena opción para ver "The Ultimate Fighter" y otros programas deportivos de ESPN que enriquecen tu experiencia como aficionado.</p>
+                        <div class="p-5 bg-gray-800 rounded-xl border border-gray-700 shadow-md">
+                            <p class="font-bold text-ufc-red text-lg mb-1">Para contenido complementario y análisis:</p>
+                            <p class="text-gray-300"><strong>Disney+</strong> es una excelente opción para ver "The Ultimate Fighter" y otros programas deportivos de ESPN que enriquecen tu conocimiento y pasión por el deporte de las artes marciales mixtas.</p>
                         </div>
-                        <div class="p-4 bg-yellow-50 rounded-lg border border-yellow-300">
-                            <p class="font-semibold text-yellow-700">¡Siempre verifica!:</p>
-                            <p class="text-slate-700">Los derechos de transmisión pueden cambiar. Consulta siempre las fuentes oficiales de UFC y los broadcasters locales para la información más actualizada de cada evento.</p>
+                        <div class="p-5 bg-yellow-900 rounded-xl border border-yellow-700 shadow-md">
+                            <p class="font-bold text-yellow-200 text-lg mb-1">¡Siempre verifica la información!:</p>
+                            <p class="text-yellow-100">Los derechos de transmisión y la disponibilidad de contenido pueden cambiar. Consulta siempre las fuentes oficiales de UFC y los broadcasters locales para la información más actualizada de cada evento y cartelera.</p>
                         </div>
                     </div>
                 </div>
             </section>
         </main>
 
-        <footer class="text-center mt-12 py-6 border-t border-slate-300">
-            <p class="text-sm text-slate-500">&copy; <span id="currentYear"></span> Guía Interactiva UFC México. Información basada en el reporte proporcionado.</p>
+        <footer class="text-center mt-12 py-6 border-t border-gray-700">
+            <p class="text-sm text-gray-500">&copy; <span id="currentYear"></span> Guía Interactiva UFC México. Todos los derechos reservados.</p>
+            <p class="text-xs text-gray-600 mt-2">Diseño inspirado en la estética de UFC para una experiencia más inmersiva.</p>
         </footer>
 
     </div>
@@ -216,30 +348,33 @@
             const tabs = document.querySelectorAll('.tab-button');
             const contentSections = document.querySelectorAll('.content-section');
 
+            // Función para establecer la pestaña activa y aplicar estilos
             function setActiveTab(tabButton) {
                 tabs.forEach(btn => {
                     btn.classList.remove('tab-active');
-                    btn.classList.add('text-slate-600', 'hover:text-sky-600', 'border-transparent');
+                    btn.classList.add('text-gray-300', 'hover:text-ufc-red', 'border-transparent');
                 });
                 tabButton.classList.add('tab-active');
-                tabButton.classList.remove('text-slate-600', 'hover:text-sky-600', 'border-transparent');
+                tabButton.classList.remove('text-gray-300', 'hover:text-ufc-red', 'border-transparent');
             }
             
+            // Función para mostrar la sección de contenido y aplicar animación
             function showContent(tabId) {
                 contentSections.forEach(section => {
                     section.classList.remove('active');
                 });
                 const activeSection = document.getElementById(tabId);
                 if (activeSection) {
-                    activeSection.classList.add('active');
+                    activeSection.classList.add('active'); // Esto activa la transición de opacidad
                 }
             }
 
-            // Set initial active tab and content
+            // Establece la pestaña inicial activa y su contenido al cargar la página
             const initialTab = tabs[0];
             setActiveTab(initialTab);
             showContent(initialTab.dataset.tab);
 
+            // Añade event listeners a cada botón de pestaña para cambiar de sección
             tabs.forEach(tab => {
                 tab.addEventListener('click', function () {
                     const tabId = this.dataset.tab;
@@ -248,7 +383,7 @@
                 });
             });
 
-            // Chart.js for Regional Comparison
+            // Configuración del gráfico de barras con Chart.js para la Comparativa Regional
             const regionalCtx = document.getElementById('regionalChart');
             if (regionalCtx) {
                 new Chart(regionalCtx, {
@@ -257,22 +392,22 @@
                         labels: ['México', 'Argentina', 'Chile', 'Colombia', 'Perú', 'Venezuela'],
                         datasets: [{
                             label: 'UFC en Vivo en Disney+',
-                            data: [0, 1, 1, 1, 1, 1], // 0 for No, 1 for Yes
+                            data: [0, 1, 1, 1, 1, 1], // 0 para No, 1 para Sí
                             backgroundColor: [
-                                'rgba(239, 68, 68, 0.7)', // Red for No (México)
-                                'rgba(59, 130, 246, 0.7)', // Blue for Yes
-                                'rgba(59, 130, 246, 0.7)',
-                                'rgba(59, 130, 246, 0.7)',
-                                'rgba(59, 130, 246, 0.7)',
-                                'rgba(59, 130, 246, 0.7)'
+                                'rgba(204, 0, 0, 0.8)', /* Rojo UFC para No (México) */
+                                'rgba(212, 175, 55, 0.8)', /* Dorado UFC para Sí */
+                                'rgba(212, 175, 55, 0.8)',
+                                'rgba(212, 175, 55, 0.8)',
+                                'rgba(212, 175, 55, 0.8)',
+                                'rgba(212, 175, 55, 0.8)'
                             ],
                             borderColor: [
-                                'rgba(239, 68, 68, 1)',
-                                'rgba(59, 130, 246, 1)',
-                                'rgba(59, 130, 246, 1)',
-                                'rgba(59, 130, 246, 1)',
-                                'rgba(59, 130, 246, 1)',
-                                'rgba(59, 130, 246, 1)'
+                                'rgba(204, 0, 0, 1)',
+                                'rgba(212, 175, 55, 1)',
+                                'rgba(212, 175, 55, 1)',
+                                'rgba(212, 175, 55, 1)',
+                                'rgba(212, 175, 55, 1)',
+                                'rgba(212, 175, 55, 1)'
                             ],
                             borderWidth: 1
                         }]
@@ -287,7 +422,19 @@
                                     stepSize: 1,
                                     callback: function(value) {
                                         return value === 1 ? 'Sí' : 'No';
-                                    }
+                                    },
+                                    color: '#aaaaaa' /* Color de las etiquetas del eje Y */
+                                },
+                                grid: {
+                                    color: '#444444' /* Color de las líneas de la cuadrícula */
+                                }
+                            },
+                            x: {
+                                ticks: {
+                                    color: '#aaaaaa' /* Color de las etiquetas del eje X */
+                                },
+                                grid: {
+                                    color: '#444444' /* Color de las líneas de la cuadrícula */
                                 }
                             }
                         },
@@ -314,7 +461,7 @@
                 });
             }
             
-            // Set current year in footer
+            // Establece el año actual en el pie de página
             document.getElementById('currentYear').textContent = new Date().getFullYear();
         });
     </script>
